@@ -49,11 +49,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* Locking resynchronize hack */
 #define LOCKING_RESYNC_ENABLE
 
-/* ws2812 RGB LED */
-#define RGB_DI_PIN D3
+#define TAPPING_TERM 300
+// #define LEADER_TIMEOUT 300
 
-#define RGBLED_NUM 12    // Number of LEDs
-
-/* Backlight LEDs */
-#define BACKLIGHT_PIN B5
-#define BACKLIGHT_LEVELS 7
+#define AdafruitBleCSPin    F4
+#define AdafruitBleIRQPin   C7
+#define AdafruitBleResetPin F5
