@@ -49,9 +49,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* Locking resynchronize hack */
 #define LOCKING_RESYNC_ENABLE
 
-#define TAPPING_TERM 300
+#define TAPPING_TERM 200
 // #define LEADER_TIMEOUT 300
 
 #define AdafruitBleCSPin    F4
 #define AdafruitBleIRQPin   C7
 #define AdafruitBleResetPin F5
+
+// #define MK_3_SPEED
+#define MOUSEKEY_DELAY	300
+#define MOUSEKEY_INTERVAL	50
+#define MOUSEKEY_MAX_SPEED	10
+#define MOUSEKEY_TIME_TO_MAX	20
+#define MOUSEKEY_WHEEL_MAX_SPEED	8	
+#define MOUSEKEY_WHEEL_TIME_TO_MAX	40	
