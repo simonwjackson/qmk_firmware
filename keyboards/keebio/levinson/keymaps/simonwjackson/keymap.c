@@ -9,15 +9,24 @@
 #define KC_STAR LSFT(KC_8)
 #define TD_DASH TD(CT_DASH)
 
-// void eeconfig_init_user(void) {
-//     set_unicode_input_mode(UC_OSX);
-// }
+// Combos
+enum combos { 
+  JK_TAB
+};
 
+const uint16_t PROGMEM jk_combo[] = {KC_K, KC_J, COMBO_END};
+
+combo_t key_combos[COMBO_COUNT] = {
+  [JK_TAB] = COMBO(jk_combo, KC_ESC)
+};
+
+// Init FN
 void matrix_init_user(void) {
   if(get_unicode_input_mode() != UC_LNX) {
     set_unicode_input_mode(UC_LNX);
-  //  if(get_unicode_input_mode() != UC_OSX) {
-  //    set_unicode_input_mode(UC_OSX);
+  }
+  else if(get_unicode_input_mode() != UC_OSX) {
+     set_unicode_input_mode(UC_OSX);
   }
 }
 
@@ -161,14 +170,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 //Tap Dance Declarations
 enum {
-  CT_OPEN = 0,
-  CT_CLOSE = 1,
-  CT_PUNC = 2,
-  CT_SLSH = 3,
-  CT_TICKS = 4,
-  CT_COLN = 5,
-  CT_MARK = 6,
-  CT_DASH = 7
+  CT_PUNC = 0,
+  CT_SLSH = 1,
+  CT_TICKS = 2,
+  CT_COLN = 3,
+  CT_MARK = 4,
+  CT_DASH = 5
 };
 
 enum unicode_names {
@@ -198,7 +205,7 @@ const uint32_t PROGMEM unicode_map[] = {
     [SKULL]     = 0x2620,  // ☠
     [HUNDRED]   = 0x1F4AF, // 💯
 
-    /* Faces */ 
+    // /* Faces */ 
     [SMILING]  = 0x1F642, // 🙂
     [BEAMING]   = 0x1F601, // 😁
     [THINKING]  = 0x1F914, // 🤔
@@ -213,41 +220,6 @@ const uint32_t PROGMEM unicode_map[] = {
     [DISAPPOINTED] = 0x1F61E //😞 
 };
 
-void dance_open_finished (qk_tap_dance_state_t *state, void *user_data) {
-  if (state->count == 1) {
-    register_code (KC_LBRACKET); 
-	}
-  else if (state->count == 2) {
-    register_code (KC_RSFT);
-    register_code (KC_9);
-  }
-  else if (state->count == 3) {
-    register_code (KC_RSFT);
-    register_code (KC_LBRACKET); 
-  } 
-	else {
-    register_code (KC_RSFT);
-    register_code (KC_COMMA); 
-  }
-}
-
-void dance_open_reset (qk_tap_dance_state_t *state, void *user_data) {
-  if (state->count == 1) {
-    unregister_code (KC_LBRACKET); 
-	}
-  else if (state->count == 2) {
-    unregister_code (KC_RSFT);
-    unregister_code (KC_9);
-  }
-  else if (state->count == 3) {
-    unregister_code (KC_RSFT);
-    unregister_code (KC_LBRACKET); 
-  } 
-	else {
-    unregister_code (KC_RSFT);
-    unregister_code (KC_COMMA); 
-  }
-}
 
 void dance_dash_finished (qk_tap_dance_state_t *state, void *user_data) {
   if (state->count == 1) {
@@ -266,42 +238,6 @@ void dance_dash_reset (qk_tap_dance_state_t *state, void *user_data) {
 	else {
     unregister_code (KC_RSFT);
     unregister_code (KC_MINS); 
-  }
-}
-
-void dance_close_finished (qk_tap_dance_state_t *state, void *user_data) {
-  if (state->count == 1) {
-    register_code (KC_RBRACKET); 
-	}
-  else if (state->count == 2) {
-    register_code (KC_RSFT);
-    register_code (KC_0);
-  }
-  else if (state->count == 3) {
-    register_code (KC_RSFT);
-    register_code (KC_RBRACKET); 
-  } 
-	else {
-    register_code (KC_RSFT);
-    register_code (KC_DOT); 
-  }
-}
-
-void dance_close_reset (qk_tap_dance_state_t *state, void *user_data) {
-  if (state->count == 1) {
-    unregister_code (KC_RBRACKET); 
-	}
-  else if (state->count == 2) {
-    unregister_code (KC_RSFT);
-    unregister_code (KC_0);
-  }
-  else if (state->count == 3) {
-    unregister_code (KC_RSFT);
-    unregister_code (KC_RBRACKET); 
-  }
-	else {
-    unregister_code (KC_RSFT);
-    unregister_code (KC_DOT); 
   }
 }
 
@@ -438,10 +374,7 @@ void dance_colon_reset (qk_tap_dance_state_t *state, void *user_data) {
   }
 }
 
-// All tap dance functions would go here. Only showing this one.
 qk_tap_dance_action_t tap_dance_actions[] = {
- [CT_OPEN] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, dance_open_finished, dance_open_reset),
- [CT_CLOSE] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, dance_close_finished, dance_close_reset),
  [CT_PUNC] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, dance_punctuation_finished, dance_punctuation_reset),
  [CT_MARK] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, dance_marks_finished, dance_marks_reset),
  [CT_DASH] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, dance_dash_finished, dance_dash_reset),
@@ -455,9 +388,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-------------------------------------------------     ,--------------------------------------------------.
  * |      |     |      |  L12  |  L4  |     L2      |     |           |       |       |      |       | Back  |
  * |------+-----+------+-------+------+-------------+     |-----------+-------+-------+------+-------+-------|
- * | C/E  |  L1 |  L11 |  L13  |  L10 |     L14     |     |           |       |       |      |  :;   | Enter |
+ * | C/E  |  L1 |  L11 |  L10  |  L13 |     L14     |     |           |       |       |      |  :;   | Enter |
  * |------+-----+------+-------+------+-------------+     |-----------+-------+-------+------+-------+-------|
- * |      |     |      |       |      |             |     |           |       | Marks | Punc | Pipes | Ticks |
+ * |      |     |      |       |  L6  |             |     |           |       | Marks | Punc | Pipes | Ticks |
  * |------+-----+------+-------+------+-------------|     |-----------+-------+-------+------+-------+-------|
  * |      |     |      |  Meh  |  Alt |  Gui / Spc  |     | Sft / Spc |       |       |      |       |       |
  * `------------------------------------------------`     `--------------------------------------------------'
@@ -465,9 +398,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	[0] = LAYOUT( 
 		KC_TRNS, KC_Q, KC_W, LT(12, KC_E), LT(4, KC_R), LT(2, KC_T),
     /*****/ KC_Y, KC_U, KC_I, KC_O, KC_P, KC_BSPC, 
-		LCTL_T(KC_ESC), LT(1, KC_A), LT(11, KC_S), LT(13, KC_D), LT(10, KC_F), LT(14, KC_G),
+		LCTL_T(KC_ESC), LT(1, KC_A), LT(11, KC_S), LT(10, KC_D), LT(13, KC_F), LT(14, KC_G),
     /*****/ KC_H, KC_J, KC_K, KC_L, TD(CT_COLN), KC_ENT,
-    KC_TRNS, KC_Z, KC_X, KC_C, KC_V, KC_B,
+    KC_TRNS, KC_Z, KC_X, KC_C, LT(6, KC_V), KC_B,
     /*****/ KC_N, KC_M, TD(CT_MARK), TD(CT_PUNC), TD(CT_SLSH), TD(CT_TICKS), 
 		LT(5, KC_TRNS), KC_TRNS, KC_TRNS, MEH_T(KC_TRNS), LALT_T(KC_TRNS), LGUI_T(KC_SPC),
     /*****/  LSFT_T(KC_SPC), KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
@@ -530,19 +463,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Tabbing
  * ,-----------------------------------------.     ,----------------------------------------------------------.
- * |      |      |      |      |      |      |     |           |       |           |       |  S + Tab  |      |
+ * |      |      |      |      |      |      |     |   S + ~   |   ~   |   S + ~   |   ~   |           |      |
  * |------+------+------+------+------+------|     |-----------+-------+-----------+-------+-----------+------|
  * |      |      |      |      |      |      |     |  S + Tab  |  Tab  |  S + Tab  |  Tab  |           |      |
  * |------+------+------+------+------+------|     |-----------+-------+-----------+-------+-----------+------|
- * |      |      |      |      |      |      |     |    Tab    |       |           |       |           |      |
+ * |      |      |      |      |      |      |     |           |       |           |       |           |      |
  * |------+------+------+------+------+------|     |-----------+-------+-----------+-------+-----------+------|
  * |      |      |      |      |      |      |     |           |       |           |       |           |      |
  * `-----------------------------------------|     |----------------------------------------------------------'
  */
 	[4] = LAYOUT(
-    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_STAB, KC_TRNS, 
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ LSFT(KC_TILD), KC_TILD, LSFT(KC_TILD), KC_TILD, KC_TRNS, KC_TRNS, 
     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ KC_STAB, KC_TAB, KC_STAB, KC_TAB, KC_TRNS, KC_TRNS,
-    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ KC_TAB, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, 
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, 
     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
   ),
 
@@ -645,14 +578,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------+     ------+-----+-----+-----+-----+-----+-----|
  * |      |      |      |      |      |      |     |  *  |  1  |  2  |  3  |  /  |     |     |
  * |------+------+------+------+------+------+     ------+-----+-----+-----+-----+-----+-----|
- * |      |      |      |      |      |      |     |     |  .  |  0  |  =  |     |     |     |
+ * |      |      |      |      |      |      |     |  =  |  .  |  0  |     |     |     |     |
  * `------------------------------------------     `----------------------------------------'
  */
   [10] = LAYOUT(
     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ KC_HASH, KC_7, KC_8, KC_9, KC_PERCENT, KC_BSPC, 
     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ KC_PPLS, KC_4, KC_5, KC_6, TD_DASH, KC_TRNS, 
-    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ KC_STAR, KC_1, KC_2, KC_3, KC_SLSH, KC_TRNS, 
-    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ KC_NO, KC_DOT, KC_0, KC_EQL, KC_NO, KC_TRNS
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ KC_ASTR, KC_1, KC_2, KC_3, KC_SLSH, KC_TRNS, 
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ KC_EQL, KC_DOT, KC_0, KC_NO, KC_NO, KC_TRNS
   ),
 
 /* Symbols
@@ -708,12 +641,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /* **** */ SIM_BRACES, KC_LCBR, KC_RCBR, SIM_BRACES_SPC, KC_TRNS, KC_TRNS,
     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /* **** */ SIM_ANGLES, KC_LT , KC_GT, SIM_ANGLES_SPC, SIM_HTML_CLOSE, KC_TRNS 
   ),
-
-  // emoji
-  // [THUMBS_UP] = 0x1F44D, // 
-  // [PARTY]     = 0x1F389, // 
-  // [SKULL]     = 0x2620,  // 
-  // [HUNDRED]   = 0x1F4AF, // 
 
 /* Emojis
  * ,------------------------------------------     ,--------------------------------------------.
