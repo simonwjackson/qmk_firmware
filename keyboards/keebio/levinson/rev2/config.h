@@ -49,17 +49,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* Locking resynchronize hack */
 #define LOCKING_RESYNC_ENABLE
 
-#define TAPPING_TERM 200
-// #define LEADER_TIMEOUT 300
+/* ws2812 RGB LED */
+#define RGB_DI_PIN D3
 
-#define AdafruitBleCSPin    F4
-#define AdafruitBleIRQPin   C7
-#define AdafruitBleResetPin F5
+#define RGBLED_NUM 12    // Number of LEDs
 
-// #define MK_3_SPEED
-#define MOUSEKEY_DELAY	300
-#define MOUSEKEY_INTERVAL	50
-#define MOUSEKEY_MAX_SPEED	10
-#define MOUSEKEY_TIME_TO_MAX	20
-#define MOUSEKEY_WHEEL_MAX_SPEED	8	
-#define MOUSEKEY_WHEEL_TIME_TO_MAX	40	
+/* Backlight LEDs */
+#define BACKLIGHT_PIN B5
+#define BACKLIGHT_LEVELS 7
