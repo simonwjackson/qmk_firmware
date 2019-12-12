@@ -22,69 +22,28 @@ void matrix_init_user(void) {
 }
 
 enum custom_keycodes {
+  /* wrapper */ 
   SIM_BRACKETS = SAFE_RANGE,
   SIM_PARENS,
   SIM_BRACES,
   SIM_ANGLES,
-  /* emoji */
-  SIM_THRILLED,
-  SIM_HAPPY,
-  SIM_HAPPY_EMOJI,
-  SIM_SAD,
-  SIM_ANGRY,
-  SIM_CLOUD
+  SIM_BRACKETS_SPC,
+  SIM_PARENS_SPC,
+  SIM_BRACES_SPC,
+  SIM_ANGLES_SPC,
+  SIM_HTML_CLOSE,
+  /* programming */
+  SIM_FARR,
+  SIM_SARR,
+  SIM_ARR_FN,
+  SIM_CONST,
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
-    case SIM_HAPPY_EMOJI:       // 😊
-        if(record->event.pressed){
-            send_unicode_hex_string("1F60A");
-        }
-        return false;
-        break; 
-
-    case SIM_CLOUD:       // (っ◕‿◕)っ
-        if(record->event.pressed){
-            send_unicode_hex_string("0028 3063 25D5 203F 25D5 0029 3063");
-        }
-        return false;
-        break;
-
-    case SIM_THRILLED:
-      if (record->event.pressed) {
-
-        // when keycode SIM_PARENS is pressed
-        SEND_STRING(":D");
-      } else {
-        // when keycode SIM_PARENS is released
-      }
-      break;
-    case SIM_HAPPY:
-      if (record->event.pressed) {
-        // when keycode SIM_PARENS is pressed
-        SEND_STRING(":)");
-      } else {
-        // when keycode SIM_PARENS is released
-      }
-      break;
-    case SIM_SAD:
-      if (record->event.pressed) {
-        // when keycode SIM_PARENS is pressed
-        SEND_STRING(":(");
-      } else {
-        // when keycode SIM_PARENS is released
-      }
-      break;
-    case SIM_ANGRY:
-      if (record->event.pressed) {
-        // when keycode SIM_PARENS is pressed
-        SEND_STRING(":/");
-      } else {
-        // when keycode SIM_PARENS is released
-      }
-      break;
-
+    // send_unicode_hex_string("0028 3063 25D5 203F 25D5 0029 3063"); 
+  
+    // Wrappers
     case SIM_BRACKETS:
       if (record->event.pressed) {
         // when keycode SIM_PARENS is pressed
@@ -93,6 +52,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         // when keycode SIM_PARENS is released
       }
       break;
+
+    case SIM_BRACKETS_SPC:
+      if (record->event.pressed) {
+        // when keycode SIM_PARENS is pressed
+        SEND_STRING("[  ]" SS_TAP(X_LEFT) SS_TAP(X_LEFT));
+      } else {
+        // when keycode SIM_PARENS is released
+      }
+      break;
+
     case SIM_PARENS:
       if (record->event.pressed) {
         // when keycode SIM_PARENS is pressed
@@ -101,6 +70,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         // when keycode SIM_PARENS is released
       }
       break; 
+
+    case SIM_PARENS_SPC:
+      if (record->event.pressed) {
+        // when keycode SIM_PARENS is pressed
+        SEND_STRING("(  )" SS_TAP(X_LEFT) SS_TAP(X_LEFT));
+      } else {
+        // when keycode SIM_PARENS is released
+      }
+      break; 
+
     case SIM_BRACES:
       if (record->event.pressed) {
         // when keycode SIM_PARENS is pressed
@@ -109,6 +88,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         // when keycode SIM_PARENS is released
       }
       break; 
+
+    case SIM_BRACES_SPC:
+      if (record->event.pressed) {
+        // when keycode SIM_PARENS is pressed
+        SEND_STRING("{  }" SS_TAP(X_LEFT) SS_TAP(X_LEFT));
+      } else {
+        // when keycode SIM_PARENS is released
+      }
+      break; 
+
     case SIM_ANGLES:
       if (record->event.pressed) {
         // when keycode SIM_PARENS is pressed
@@ -117,6 +106,54 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         // when keycode SIM_PARENS is released
       }
       break; 
+
+    case SIM_ANGLES_SPC:
+      if (record->event.pressed) {
+        // when keycode SIM_PARENS is pressed
+        SEND_STRING("<  >" SS_TAP(X_LEFT) SS_TAP(X_LEFT));
+      } else {
+        // when keycode SIM_PARENS is released
+      }
+      break; 
+
+    case SIM_HTML_CLOSE:
+      if (record->event.pressed) {
+        // when keycode SIM_PARENS is pressed
+        SEND_STRING("</>" SS_TAP(X_LEFT));
+      } else {
+        // when keycode SIM_PARENS is released
+      }
+      break; 
+
+    /* Programming */
+
+    case SIM_CONST:
+        if(record->event.pressed){
+          SEND_STRING("const ");
+        }
+        return false;
+        break;
+
+    case SIM_ARR_FN:
+        if(record->event.pressed){
+          SEND_STRING("() => {  }" SS_TAP(X_LEFT) SS_TAP(X_LEFT));
+        }
+        return false;
+        break;
+
+    case SIM_SARR:
+        if(record->event.pressed){
+          SEND_STRING("->");
+        }
+        return false;
+        break; 
+
+    case SIM_FARR:
+        if(record->event.pressed){
+          SEND_STRING("=>");
+        }
+        return false;
+        break; 
   }
 
   return true;
@@ -656,20 +693,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Wrappers
  * ,------------------------------------------     ,-------------------------------------------------.
- * |      |      |      |      |      |      |     |   [I]   |   [   |   ]   |   [I]   |      |      |
+ * |      |      |      |      |      |      |     |   [I]   |   [   |   ]   |  [ I ]  |      |      |
  * |------+------+------+------+------+------+     ----------+-------+-------+---------+------+------|
- * |      |      |      |      |      |      |     |   (I)   |   (   |   )   |   (I)   |      |      |
+ * |      |      |      |      |      |      |     |   (I)   |   (   |   )   |  ( I )  |      |      |
  * |------+------+------+------+------+------+     ----------+-------+-------+---------+------+------|
- * |      |      |      |      |      |      |     |   {I}   |   {   |   }   |   {I}   |      |      |
+ * |      |      |      |      |      |      |     |   {I}   |   {   |   }   |  { I }  |      |      |
  * |------+------+------+------+------+------+     ----------+-------+-------+---------+------+------|
- * |      |      |      |      |      |      |     |   <I>   |   <   |   >   |   <I>   |      |      |
+ * |      |      |      |      |      |      |     |   <I>   |   <   |   >   |  < I >  |  </> |      |
  * `------------------------------------------     `-------------------------------------------------'
  */
 	[13] = LAYOUT(
-    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /* **** */ SIM_BRACKETS, KC_LBRACKET, KC_RBRACKET, SIM_BRACKETS, KC_TRNS, KC_TRNS, /* **** */ 
-    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /* **** */ SIM_PARENS, KC_LPRN, KC_RPRN, SIM_PARENS, KC_TRNS, KC_TRNS, /* **** */ 
-    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /* **** */ SIM_BRACES, KC_LCBR, KC_RCBR, SIM_BRACES, KC_TRNS, KC_TRNS, /* **** */ 
-    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /* **** */ SIM_ANGLES, KC_LT , KC_GT, SIM_ANGLES, KC_TRNS, KC_TRNS /* **** */ 
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /* **** */ SIM_BRACKETS, KC_LBRACKET, KC_RBRACKET, SIM_BRACKETS_SPC, KC_TRNS, KC_TRNS, 
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /* **** */ SIM_PARENS, KC_LPRN, KC_RPRN, SIM_PARENS_SPC, KC_TRNS, KC_TRNS, 
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /* **** */ SIM_BRACES, KC_LCBR, KC_RCBR, SIM_BRACES_SPC, KC_TRNS, KC_TRNS,
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /* **** */ SIM_ANGLES, KC_LT , KC_GT, SIM_ANGLES_SPC, SIM_HTML_CLOSE, KC_TRNS 
   ),
 
   // emoji
