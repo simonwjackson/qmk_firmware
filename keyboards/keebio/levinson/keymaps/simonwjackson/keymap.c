@@ -46,6 +46,8 @@ enum custom_keycodes {
   SIM_SARR,
   SIM_ARR_FN,
   SIM_CONST,
+  SIM_GIT_PUSH,
+  SIM_GIT_REBASE
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -160,6 +162,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case SIM_FARR:
         if(record->event.pressed){
           SEND_STRING("=>");
+        }
+        return false;
+        break; 
+
+    case SIM_GIT_PUSH:
+        if(record->event.pressed){ 
+          SEND_STRING("git push --no-verify --set-upstream origin ");
+        }
+        return false;
+        break; 
+
+    case SIM_GIT_REBASE:
+        if(record->event.pressed){ 
+          SEND_STRING("git rebase --interactive upstream/develop ");
         }
         return false;
         break; 
@@ -406,7 +422,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /*****/  LSFT_T(KC_SPC), KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
 	),
 
-/* Arrows
+/* Vimulation
  * ,------------------------------------------     ,---------------------------------------------.
  * |      |      |      |      |      |      |     |       |       |       |       |      |      |
  * |------+------+------+------+------+------+     --------+-------+-------+-------+------+------|
@@ -500,19 +516,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* 
  * ,------------------------------------------     ,-----------------------------------------.
- * |      |      |      |      |      |      |     |      |      |      |      |      |      |
+ * |      |      |      |      |      |      |     | cnst |      |      |      |      |      |
  * |------+------+------+------+------+------+     -------+------+------+------+------+------|
- * |      |      |      |      |      |      |     |      |      |      |      |      |      |
+ * |      |      |      |      |      |      |     | jsfn |  =>  |  ->  |      |      |      |
  * |------+------+------+------+------+------+     -------+------+------+------+------+------|
- * |      |      |      |      |      |      |     |      |      |      |      |      |      |
+ * |      |      |      |      |      |      |     |      | push | reba |      |      |      |
  * |------+------+------+------+------+------+     -------+------+------+------+------+------|
  * |      |      |      |      |      |      |     |      |      |      |      |      |      |
  * `------------------------------------------     `-----------------------------------------'
  */
 	[6] = LAYOUT(
-    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, 
-    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, 
-    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, 
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ SIM_CONST, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, 
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ SIM_ARR_FN, SIM_FARR, SIM_SARR, KC_TRNS, KC_TRNS, KC_TRNS, 
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ KC_TRNS, SIM_GIT_PUSH, SIM_GIT_REBASE, KC_TRNS, KC_TRNS, KC_TRNS, 
     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
   ),
 
