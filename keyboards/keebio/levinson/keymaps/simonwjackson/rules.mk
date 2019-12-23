@@ -1,10 +1,13 @@
-# BLUETOOTH = AdafruitBLE		# 4748b
-# RGBLIGHT_ENABLE = no			# 3780b 
+BLUETOOTH = AdafruitBLE		# 4748b
+RGBLIGHT_ENABLE = yes			# 3780b 
 MOUSEKEY_ENABLE = yes			# 2614b
-# OLED_DRIVER_ENABLE = yes	# 1582b
+OLED_DRIVER_ENABLE = yes	# 1582b
 UNICODEMAP_ENABLE = yes		# 1228b (with mappings), 4b per key
 TAP_DANCE_ENABLE = yes		# 1208b (with mappings), 700b + 508b mappings
 EXTRAKEY_ENABLE = yes			#  450b, media keys
 COMBO_ENABLE = yes 				#  408b
 LEADER_ENABLE = yes 			#  200b
 BACKLIGHT_ENABLE = no
+COMMAND_ENABLE = no 
+CONSOLE_ENABLE = no
+EXTRAFLAGS += -flto 

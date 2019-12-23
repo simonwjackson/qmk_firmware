@@ -11,23 +11,47 @@
 
 // Combos
 enum combos { 
-  JK_TAB
+  SCLN_K_CMB,
+  JK_TAB,
+  ZX_UNDO,
+  CV_COPY
 };
 
-const uint16_t PROGMEM jk_combo[] = {KC_K, KC_J, COMBO_END};
+const uint16_t PROGMEM jk_combo[] =     {KC_K, KC_J, COMBO_END};
+const uint16_t PROGMEM enter_combo[] =  {KC_U, KC_I, COMBO_END};
+const uint16_t PROGMEM undo_combo[] =   {KC_Z, KC_X, COMBO_END};
+const uint16_t PROGMEM copy_combo[] =   {KC_C, KC_V, COMBO_END};
 
 combo_t key_combos[COMBO_COUNT] = {
-  [JK_TAB] = COMBO(jk_combo, KC_ESC)
+  [JK_TAB] = COMBO(jk_combo, KC_ESC),
+  [SCLN_K_CMB] = COMBO(enter_combo, KC_ENT),
+  [ZX_UNDO] = COMBO_ACTION(undo_combo),
+  [CV_COPY] = COMBO_ACTION(copy_combo)
 };
 
+void process_combo_event(uint8_t combo_index, bool pressed) {
+  switch(combo_index) {
+    case ZX_UNDO:
+      if (pressed) {
+        tap_code16(LCTL(KC_Z));
+      }
+      break;
+
+    case CV_COPY:
+      if (pressed) {
+        tap_code16(LCTL(KC_C));
+      }
+      break;
+  }
+}
 // Init FN
 void matrix_init_user(void) {
-  if(get_unicode_input_mode() != UC_LNX) {
-    set_unicode_input_mode(UC_LNX);
-  }
-  else if(get_unicode_input_mode() != UC_OSX) {
+  // if(get_unicode_input_mode() != UC_LNX) {
+  //   set_unicode_input_mode(UC_LNX);
+  // }
+  // else if(get_unicode_input_mode() != UC_OSX) {
      set_unicode_input_mode(UC_OSX);
-  }
+  // }
 }
 
 enum custom_keycodes {
@@ -42,6 +66,8 @@ enum custom_keycodes {
   SIM_ANGLES_SPC,
   SIM_HTML_CLOSE,
   /* programming */
+  SIM_PIPE,
+  SIM_COMPOSE,
   SIM_FARR,
   SIM_SARR,
   SIM_ARR_FN,
@@ -137,6 +163,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       break; 
 
     /* Programming */
+    case SIM_COMPOSE:
+        if(record->event.pressed){
+          SEND_STRING("<| ");
+        }
+        return false;
+        break;
+
+    case SIM_PIPE:
+        if(record->event.pressed){
+          SEND_STRING("|> ");
+        }
+        return false;
+        break;
 
     case SIM_CONST:
         if(record->event.pressed){
@@ -406,7 +445,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+-----+------+-------+------+-------------+     |-----------+-------+-------+------+-------+-------|
  * | C/E  |  L1 |  L11 |  L10  |  L13 |     L14     |     |           |       |       |      |  :;   | Enter |
  * |------+-----+------+-------+------+-------------+     |-----------+-------+-------+------+-------+-------|
- * |      |     |      |       |  L6  |             |     |           |       | Marks | Punc | Pipes | Ticks |
+ * |      |  L5 |      |       |  L6  |             |     |           |       | Marks | Punc | Pipes | Ticks |
  * |------+-----+------+-------+------+-------------|     |-----------+-------+-------+------+-------+-------|
  * |      |     |      |  Meh  |  Alt |  Gui / Spc  |     | Sft / Spc |       |       |      |       |       |
  * `------------------------------------------------`     `--------------------------------------------------'
@@ -416,7 +455,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /*****/ KC_Y, KC_U, KC_I, KC_O, KC_P, KC_BSPC, 
 		LCTL_T(KC_ESC), LT(1, KC_A), LT(11, KC_S), LT(10, KC_D), LT(13, KC_F), LT(14, KC_G),
     /*****/ KC_H, KC_J, KC_K, KC_L, TD(CT_COLN), KC_ENT,
-    KC_TRNS, KC_Z, KC_X, KC_C, LT(6, KC_V), KC_B,
+    KC_TRNS, LT(5,KC_Z), KC_X, KC_C, LT(6, KC_V), KC_B,
     /*****/ KC_N, KC_M, TD(CT_MARK), TD(CT_PUNC), TD(CT_SLSH), TD(CT_TICKS), 
 		LT(5, KC_TRNS), KC_TRNS, KC_TRNS, MEH_T(KC_TRNS), LALT_T(KC_TRNS), LGUI_T(KC_SPC),
     /*****/  LSFT_T(KC_SPC), KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
@@ -516,20 +555,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* 
  * ,------------------------------------------     ,-----------------------------------------.
- * |      |      |      |      |      |      |     | cnst |      |      |      |      |      |
+ * |      |      |      |      |      |      |     | cnst | jsfn |    |      |      |      |
  * |------+------+------+------+------+------+     -------+------+------+------+------+------|
- * |      |      |      |      |      |      |     | jsfn |  =>  |  ->  |      |      |      |
- * |------+------+------+------+------+------+     -------+------+------+------+------+------|
- * |      |      |      |      |      |      |     |      | push | reba |      |      |      |
+ * |      |      |      |      |      |      |     |  <|  |  =>  |  ->  |  |>  |      |      |
  * |------+------+------+------+------+------+     -------+------+------+------+------+------|
  * |      |      |      |      |      |      |     |      |      |      |      |      |      |
+ * |------+------+------+------+------+------+     -------+------+------+------+------+------|
+ * |      |      |      |      |      |      |     |      | push | reba |      |      |      |
  * `------------------------------------------     `-----------------------------------------'
  */
 	[6] = LAYOUT(
-    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ SIM_CONST, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, 
-    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ SIM_ARR_FN, SIM_FARR, SIM_SARR, KC_TRNS, KC_TRNS, KC_TRNS, 
-    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ KC_TRNS, SIM_GIT_PUSH, SIM_GIT_REBASE, KC_TRNS, KC_TRNS, KC_TRNS, 
-    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ SIM_CONST, SIM_ARR_FN, KC_NO, KC_NO, KC_NO, KC_TRNS, 
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ SIM_COMPOSE, SIM_FARR, SIM_SARR, SIM_PIPE, KC_NO, KC_NO, 
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, 
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ KC_TRNS, SIM_GIT_PUSH, SIM_GIT_REBASE, KC_NO, KC_NO, KC_NO
   ),
 
 /* 
@@ -587,37 +626,37 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
 /* Numbers 
- * ,------------------------------------------     ,-----------------------------------------.
- * |      |      |      |      |      |      |     |  #  |  7  |  8  |  9  |  %  |     |     |
- * |------+------+------+------+------+------+     ------+-----+-----+-----+-----+-----+-----|
- * |      |      |      |      |      |      |     |  +  |  4  |  5  |  6  |  -_ |     |     |
- * |------+------+------+------+------+------+     ------+-----+-----+-----+-----+-----+-----|
- * |      |      |      |      |      |      |     |  *  |  1  |  2  |  3  |  /  |     |     |
- * |------+------+------+------+------+------+     ------+-----+-----+-----+-----+-----+-----|
- * |      |      |      |      |      |      |     |  =  |  .  |  0  |     |     |     |     |
- * `------------------------------------------     `----------------------------------------'
+ * ,------------------------------------------     ,-----------------------------------.
+ * |      |      |      |      |      |      |     |  #  |  7  |  8  |  9  |  %  |     |
+ * |------+------+------+------+------+------+     ------+-----+-----+-----+-----+-----|
+ * |      |      |      |      |      |      |     |  +  |  4  |  5  |  6  |  -  |    |
+ * |------+------+------+------+------+------+     ------+-----+-----+-----+-----+-----|
+ * |      |      |      |      |      |      |     |  *  |  1  |  2  |  3  |  /  |     |
+ * |------+------+------+------+------+------+     ------+-----+-----+-----+-----+-----|
+ * |      |      |      |      |      |      |     |  =  |  .  |  0  |     |     |     |
+ * `------------------------------------------     `----------------------------------'
  */
   [10] = LAYOUT(
     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ KC_HASH, KC_7, KC_8, KC_9, KC_PERCENT, KC_BSPC, 
-    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ KC_PPLS, KC_4, KC_5, KC_6, TD_DASH, KC_TRNS, 
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ KC_PPLS, KC_4, KC_5, KC_6, KC_PMNS, KC_TRNS, 
     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ KC_ASTR, KC_1, KC_2, KC_3, KC_SLSH, KC_TRNS, 
     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /*****/ KC_EQL, KC_DOT, KC_0, KC_NO, KC_NO, KC_TRNS
   ),
 
 /* Symbols
- * ,------------------------------------------     ,-----------------------------------------.
- * |      |      |      |      |      |      |     |  ~  |  /  |  |  |  \  |     |     |     |
- * |------+------+------+------+------+------+     ------+-----+-----+-----+-----+-----+-----|
- * |      |      |      |      |      |      |     |  ^  |  @  |  &  |  $  |     |     |     |
- * |------+------+------+------+------+------+     ------+-----+-----+-----+-----+-----+-----|
- * |      |      |      |      |      |      |     |     |     |     |     |     |     |     |
- * |------+------+------+------+------+------+     ------+-----+-----+-----+-----+-----+-----|
- * |      |      |      |      |      |      |     |     |     |     |     |     |     |     |
- * `------------------------------------------     `----------------------------------------'
+ * ,------------------------------------------     ,-----------------------------------.
+ * |      |      |      |      |      |      |     |  ~  |  /  |  |  |  \  |     |     |
+ * |------+------+------+------+------+------+     ------+-----+-----+-----+-----+-----|
+ * |      |      |      |      |      |      |     |  ^  |  @  |  &  |  $  |  _  |     |
+ * |------+------+------+------+------+------+     ------+-----+-----+-----+-----+-----|
+ * |      |      |      |      |      |      |     |     |     |     |     |     |     |
+ * |------+------+------+------+------+------+     ------+-----+-----+-----+-----+-----|
+ * |      |      |      |      |      |      |     |     |     |     |     |     |     |
+ * `------------------------------------------     `-----------------------------------'
  */
 	[11] = LAYOUT(
     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /* **** */ KC_TILDA, KC_SLASH, KC_PIPE, KC_BSLASH, KC_TRNS, KC_BSPC,
-    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /* **** */ KC_CARRET, KC_AT, KC_AMP, KC_DOLLAR, KC_TRNS, KC_TRNS, 
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /* **** */ KC_CARRET, KC_AT, KC_AMP, KC_DOLLAR, KC_UNDS, KC_TRNS, 
     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /* **** */ KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, /* **** */ KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS 
   ),

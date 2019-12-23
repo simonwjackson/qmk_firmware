@@ -65,7 +65,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MOUSEKEY_WHEEL_TIME_TO_MAX	40	
 
 // Combos
-#define COMBO_COUNT 1
+#define COMBO_COUNT 4
 
 // LEDs
 // #define RGB_DI_PIN	F6
