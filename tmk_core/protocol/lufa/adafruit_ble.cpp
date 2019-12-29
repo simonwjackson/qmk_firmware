@@ -27,6 +27,14 @@
 #    define AdafruitBleIRQPin E6
 #endif
 
+#ifndef AdafruitBleSCKPin
+#    define AdafruitBleSCKPin B1 
+#endif
+
+#ifndef AdafruitBleMOSIPin
+#    define AdafruitBleMOSIPin B2 
+#endif
+
 #define SAMPLE_BATTERY
 #define ConnectionUpdateInterval 1000 /* milliseconds */
 
@@ -163,7 +171,7 @@ void SPI_init(struct SPI_Settings *spi) {
 
         SPCR |= _BV(MSTR);
         SPCR |= _BV(SPE);
-        pinMode(B1 /* SCK */, PinDirectionOutput);
+        pinMode(AdafruitBleSCKPin, PinDirectionOutput);
         pinMode(B2 /* MOSI */, PinDirectionOutput);
     }
 }
