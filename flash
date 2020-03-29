@@ -1,0 +1,6 @@
+sudo echo
+echo "Sleeping 3 seconds.."
+sleep 3
+sudo dfu-programmer atmega32u4 erase --force
+sudo dfu-programmer atmega32u4 flash ./crkbd_rev1_simonwjackson.hex --debug 9
+sudo dfu-programmer atmega32u4 reset
