@@ -11,20 +11,20 @@
 
 // Combos
 enum combos { 
-  SCLN_K_CMB,
-  JK_TAB,
+  JL_ENT,
+  /* JK_TAB, */
   ZX_UNDO,
   CV_COPY
 };
 
 const uint16_t PROGMEM jk_combo[] =     {KC_K, KC_J, COMBO_END};
-const uint16_t PROGMEM enter_combo[] =  {KC_U, KC_I, COMBO_END};
+const uint16_t PROGMEM enter_combo[] =  {KC_J, KC_L, COMBO_END};
 const uint16_t PROGMEM undo_combo[] =   {KC_Z, KC_X, COMBO_END};
 const uint16_t PROGMEM copy_combo[] =   {KC_C, KC_V, COMBO_END};
 
 combo_t key_combos[COMBO_COUNT] = {
   [JK_TAB] = COMBO(jk_combo, KC_ESC),
-  [SCLN_K_CMB] = COMBO(enter_combo, KC_ENT),
+  [JL_ENT] = COMBO(enter_combo, KC_ENT),
   [ZX_UNDO] = COMBO_ACTION(undo_combo),
   [CV_COPY] = COMBO_ACTION(copy_combo)
 };
@@ -44,6 +44,7 @@ void process_combo_event(uint8_t combo_index, bool pressed) {
       break;
   }
 }
+
 // Init FN
 void matrix_init_user(void) {
   // if(get_unicode_input_mode() != UC_LNX) {

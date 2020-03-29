@@ -34,8 +34,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define USE_SERIAL_PD2
 
-#define TAPPING_FORCE_HOLD
+// #define TAPPING_FORCE_HOLD
+#define TAPPING_TERM_PER_KEY
 #define TAPPING_TERM 200
+#define COMBO_TERM 150 
 
 #ifdef RGBLIGHT_ENABLE
     #undef RGBLED_NUM
@@ -54,9 +56,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define AdafruitBleResetPin B7
 
 // #define MK_3_SPEED
-#define MOUSEKEY_DELAY              300
-#define MOUSEKEY_INTERVAL           50
-#define MOUSEKEY_MAX_SPEED          10
-#define MOUSEKEY_TIME_TO_MAX        20
-#define MOUSEKEY_WHEEL_MAX_SPEED	8	
+#define MK_MOMENTARY_ACCEL
+#define MMOUSEKEY_DELAY 	1000 	
+#define MMOUSEKEY_INTERVAL 	1000 
+#define MMOUSEKEY_MAX_SPEED 	1
+#define MMOUSEKEY_TIME_TO_MAX 	1000
+#define MOUSEKEY_WHEEL_MAX_SPEED	  8	
 #define MOUSEKEY_WHEEL_TIME_TO_MAX	40	
+
+// Combos
+#define COMBO_COUNT 4
