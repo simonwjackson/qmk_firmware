@@ -34,20 +34,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define USE_SERIAL_PD2
 
-// #define TAPPING_FORCE_HOLD
+#define TAPPING_FORCE_HOLD
 #define TAPPING_TERM_PER_KEY
-#define TAPPING_TERM 200
-#define COMBO_TERM 150 
-
-#ifdef RGBLIGHT_ENABLE
-    #undef RGBLED_NUM
-    #define RGBLIGHT_ANIMATIONS
-    #define RGBLED_NUM 27
-    #define RGBLIGHT_LIMIT_VAL 120
-    #define RGBLIGHT_HUE_STEP 10
-    #define RGBLIGHT_SAT_STEP 17
-    #define RGBLIGHT_VAL_STEP 17
-#endif
+#define TAPPING_TERM 150
+#define COMBO_TERM 120 
 
 #define AdafruitBleSCKPin   F0
 #define AdafruitBleMOSIPin  F1 
@@ -65,4 +55,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MOUSEKEY_WHEEL_TIME_TO_MAX	40	
 
 // Combos
-#define COMBO_COUNT 4
+#define COMBO_COUNT 5
+
+#define IGNORE_MOD_TAP_INTERRUPT
+#define IGNORE_MOD_TAP_INTERRUPT_PER_KEY
+#define PERMISSIVE_HOLD
+#undef PREVENT_STUCK_MODIFIERS

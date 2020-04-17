@@ -4,6 +4,7 @@ COMBO_ENABLE = yes 				#  408b
 MOUSEKEY_ENABLE = yes			# 2614b
 # OLED_DRIVER_ENABLE = yes	# 1582b
 # UNICODEMAP_ENABLE = yes		# 1228b (with mappings), 4b per key
+UNICODE_ENABLE = yes
 TAP_DANCE_ENABLE = yes		# 1208b (with mappings), 700b + 508b mappings
 EXTRAKEY_ENABLE = yes			#  450b, media keys
 # LEADER_ENABLE = yes 			#  200b
