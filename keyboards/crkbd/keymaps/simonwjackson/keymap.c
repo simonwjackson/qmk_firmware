@@ -113,14 +113,14 @@ void matrix_init_user(void) {
   set_unicode_input_mode(UC_WINC);
 }
 
-uint16_t get_tapping_term(uint16_t keycode) {
-  switch (keycode) {
-    case SFT_T(KC_SPC):
-      return 150;
-    default:
-      return TAPPING_TERM;
-  }
-}
+/* uint16_t get_tapping_term(uint16_t keycode) { */
+/*   switch (keycode) { */
+/*     case SFT_T(KC_SPC): */
+/*       return 150; */
+/*     default: */
+/*       return TAPPING_TERM; */
+/*   } */
+/* } */
 
 /* bool get_ignore_mod_tap_interrupt(uint16_t keycode) { */
 /*   switch (keycode) { */
